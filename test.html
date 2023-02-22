@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Editable PDF Viewer</title>
+    <style>
+      canvas {
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="pdf-canvas"></canvas>
+    <button id="save-button">Save</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+    <script>
+        // Load the PDF document
+pdfjsLib.getDocument('i-234.pdf').promise.then(function(pdf) {
+  // Get the first page of the PDF
+  return pdf.getPage(1);
+}).then(function(page) {
+  // Define the position and size of the hyperlink annotation
+  var x = 100, y = 100, width = 200, height = 50;
+
+  // Define the URL of the hyperlink
+  var url = 'https://example.com';
+
+  // Create a new hyperlink annotation and add it to the page
+  var link = new pdfjsLib.PDFJS.Annotation.Link({
+    rect: [x, y, x + width, y + height],
+    url: url
+  });
+  page.addAnnotation(link);
+
+  // Render the updated page with the hyperlink
+  var canvas = document.getElementById('pdf-canvas');
+  var viewport = page.getViewport({ scale: 1 });
+  canvas.width = viewport.width;
+  canvas.height = viewport.height;
+  var ctx = canvas.getContext('2d');
+  page.render({ canvasContext: ctx, viewport: viewport });
+});
+
+
+
+    </script>
+  </body>
+</html>

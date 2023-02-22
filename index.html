@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>PDF.js Example</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.8.335/pdf.min.js"></script>
+</head>
+<body>
+	<div id="pdf-container"></div>
+	<script>
+		// URL of the PDF file
+		const url = 'https://5.imimg.com/data5/SELLER/Doc/2021/4/QI/LK/YD/7115850/pdf-conversion-services.pdf';
+
+		// Load the PDF file
+		pdfjsLib.getDocument(url).promise.then(pdf => {
+			// Get the first page of the PDF
+			pdf.getPage(1).then(async page => {
+
+                // Get the text content of the page
+                const textContent = await page.getTextContent();
+
+                // Find the selected text
+                const selectedText = 'Address';
+                const textDivs = document.querySelectorAll('.textLayer > div');
+                const textDivsWithSelectedText = [...textDivs].filter(div => div.textContent.includes(selectedText));
+
+                // Add a hyperlink to the selected text
+                textDivsWithSelectedText.forEach(div => {
+                const link = document.createElement('a');
+                link.href = 'http://example.com';
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+                link.style.textDecoration = 'underline';
+                link.style.color = 'blue';
+                link.textContent = selectedText;
+                div.appendChild(link);
+                });
+
+				// Set the viewport of the page
+				const scale = 1.5;
+				const viewport = page.getViewport({ scale });
+
+				// Create a canvas element to render the PDF
+				const canvas = document.createElement('canvas');
+				canvas.width = viewport.width;
+				canvas.height = viewport.height;
+				document.querySelector('#pdf-container').appendChild(canvas);
+
+				// Render the page to the canvas
+				page.render({
+					canvasContext: canvas.getContext('2d'),
+					viewport,
+				});
+
+
+			});
+		});
+	</script>
+</body>
+</html>
