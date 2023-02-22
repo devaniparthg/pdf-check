@@ -28,10 +28,10 @@ pdfjsLib.getDocument('i-134.pdf').promise.then(function(pdf) {
   var url = 'https://example.com';
 
   // Create a new hyperlink annotation and add it to the page
-  var link = new pdfjsLib.PDFJS.Annotation.Link({
-    rect: [x, y, x + width, y + height],
-    url: url
-  });
+   var link = new pdfjsLib.LinkAnnotation({
+          url: 'http://www.example.com',
+          rect: [100, 100, 200, 200],
+        });
   page.addAnnotation(link);
 
   // Render the updated page with the hyperlink
